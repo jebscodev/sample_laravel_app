@@ -83,7 +83,7 @@ class UserController extends BaseController
         }
 
         $user->save();
-        return new UserResource(User::findOrFail($user->id)); 
+        return new UserResource(User::findOrFail($user->id));
     }
 
     /**
@@ -96,7 +96,7 @@ class UserController extends BaseController
     {
         $user = User::findOrFail($id);
         $user->delete();
-        
+
         return $this->sendResponse([
             "message" => "Record deleted successfully."
         ]);
@@ -108,9 +108,9 @@ class UserController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
-        User::whereIn('id', $request->ids)->delete();   
+        User::whereIn('id', $request->ids)->delete();
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);

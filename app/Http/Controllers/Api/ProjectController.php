@@ -57,7 +57,7 @@ class ProjectController extends BaseController
                 'processing_days',
                 'other_charges'
             ])
-            ->findOrFail($project->id)
+                ->findOrFail($project->id)
         );
     }
 
@@ -74,8 +74,9 @@ class ProjectController extends BaseController
                 'unsold_units:id,unit_no,project_id',
                 'unit_types',
                 'processing_days',
-                'other_charges'])
-            ->findOrFail($id)
+                'other_charges'
+            ])
+                ->findOrFail($id)
         );
     }
 
@@ -121,7 +122,7 @@ class ProjectController extends BaseController
                 'processing_days',
                 'other_charges'
             ])
-            ->findOrFail($project->id)
+                ->findOrFail($project->id)
         );
     }
 
@@ -134,11 +135,6 @@ class ProjectController extends BaseController
     public function destroy($id)
     {
         $project = Project::findOrFail($id);
-        // $project->unit_types()->detach();
-        // $project->processing_days()->detach();
-        // $project->other_charges()->detach();
-        // $project->units()->delete();
-        // $project->clients()->delete();
         $project->delete();
 
         return $this->sendResponse([
@@ -152,19 +148,11 @@ class ProjectController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
         $projects = Project::whereIn('id', $request->ids)->get();
-        foreach ($projects as $project) {
-            // $project->unit_types()->detach();
-            // $project->processing_days()->detach();
-            // $project->other_charges()->detach();
-            // $project->units()->delete();
-            // $project->clients()->delete();
-        }
-        
         Project::whereIn('id', $request->ids)->delete();
-        
+
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);

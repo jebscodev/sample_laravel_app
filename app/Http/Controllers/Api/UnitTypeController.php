@@ -23,10 +23,9 @@ class UnitTypeController extends BaseController
             $project_id = $request->query('project');
             return UnitTypeListResource::collection(
                 Project::find($project_id)
-                ->unit_types()
-                ->paginate()
+                    ->unit_types()
+                    ->paginate()
             );
-
         } else {
             return UnitTypeListResource::collection(UnitType::paginate());
         }
@@ -62,11 +61,11 @@ class UnitTypeController extends BaseController
 
             return new UnitTypeResource(
                 UnitType::with([
-                    'projects' => function($query) use ($project_id) {
+                    'projects' => function ($query) use ($project_id) {
                         return $query->where('project_id', $project_id);
-                    }]
-                )
-                ->findOrFail($id)
+                    }
+                ])
+                    ->findOrFail($id)
             );
         } else {
             return new UnitTypeResource(UnitType::findOrFail($id));
@@ -84,7 +83,7 @@ class UnitTypeController extends BaseController
     {
         $payload = $request->json()->all();
         $unit_type = UnitType::findOrFail($id);
-        
+
         foreach ($payload as $field => $value) {
             $unit_type->$field = $value;
         }
@@ -119,18 +118,12 @@ class UnitTypeController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
-        // $unit_types = UnitType::whereIn('id', $request->ids)->get();
-        // foreach ($unit_types as $unit_type) {
-        //     $unit_type->projects()->detach();
-        // }
-        
         UnitType::whereIn('id', $request->ids)->delete();
-        
+
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);
     }
 }
-

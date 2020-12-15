@@ -58,7 +58,7 @@ class OtherChargeController extends BaseController
     {
         $payload = $request->json()->all();
         $charge = OtherCharge::findOrFail($id);
-        
+
         foreach ($payload as $field => $value) {
             $charge->$field = $value;
         }
@@ -79,7 +79,6 @@ class OtherChargeController extends BaseController
     public function destroy($id)
     {
         $charge = OtherCharge::findOrFail($id);
-        // $charge->projects()->detach();
         $charge->delete();
         return $this->sendResponse([
             "message" => "Record deleted successfully."
@@ -92,15 +91,10 @@ class OtherChargeController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
-        // $charges = OtherCharge::whereIn('id', $request->ids)->get();
-        // foreach ($charges as $charge) {
-        //     $charge->projects()->detach();
-        // }
-        
         OtherCharge::whereIn('id', $request->ids)->delete();
-        
+
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);

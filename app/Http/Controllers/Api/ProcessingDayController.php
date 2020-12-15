@@ -58,7 +58,7 @@ class ProcessingDayController extends BaseController
     {
         $payload = $request->json()->all();
         $processing = ProcessingDay::findOrFail($id);
-        
+
         foreach ($payload as $field => $value) {
             $processing->$field = $value;
         }
@@ -92,15 +92,10 @@ class ProcessingDayController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
-        // $days = ProcessingDay::whereIn('id', $request->ids)->get();
-        // foreach ($days as $day) {
-        //     $day->projects()->detach();
-        // }
-        
         ProcessingDay::whereIn('id', $request->ids)->delete();
-        
+
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);

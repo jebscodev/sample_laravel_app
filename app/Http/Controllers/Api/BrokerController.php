@@ -61,7 +61,7 @@ class BrokerController extends BaseController
     {
         $payload = $request->json()->all();
         $broker = Broker::findOrFail($id);
-        
+
         foreach ($payload as $field => $value) {
             $broker->$field = $value;
         }
@@ -82,7 +82,6 @@ class BrokerController extends BaseController
     public function destroy($id)
     {
         $broker = Broker::findOrFail($id);
-        // $broker->clients()->delete();
         $broker->delete();
 
         return $this->sendResponse([
@@ -96,15 +95,10 @@ class BrokerController extends BaseController
      * @param  array  $ids
      * @return \Illuminate\Http\Response
      */
-    public function destroyMany(Request $request) 
+    public function destroyMany(Request $request)
     {
-        // $brokers = Broker::whereIn('id', $request->ids)->get();
-        // foreach ($brokers as $broker) {
-        //     $broker->clients()->delete();
-        // }
-        
         Broker::whereIn('id', $request->ids)->delete();
-        
+
         return $this->sendResponse([
             "message" => "Records are deleted successfully."
         ]);

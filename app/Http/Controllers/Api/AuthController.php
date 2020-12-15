@@ -12,34 +12,6 @@ use App\Http\Resources\User as UserResource;
 class AuthController extends BaseController
 {
 	/**
-	 * Create userlar
-	 *
-	 * @param  [string] name
-	 * @param  [string] email
-	 * @param  [string] password
-	 * @param  [string] password_confirmation
-	 * @return [string] message
-	 */
-	/* public function signup(Request $request)
-	{
-		$request->validate([
-			'name' => 'required|string',
-			'email' => 'required|string|email|unique:users',
-			'password' => 'required|string|confirmed'
-		]);
-
-		$user = new User([
-			'name' => $request->name,
-			'email' => $request->email,
-			'password' => bcrypt($request->password)
-		]);
-		$user->save();
-		
-		// sendResponse is defined at BaseController
-		return $this->sendResponse('Successfully created user!', [], 201);
-	} */
-  
-	/**
 	 * Login user and create token
 	 *
 	 * @param  [string] email
@@ -49,7 +21,7 @@ class AuthController extends BaseController
 	 * @return [string] token_type
 	 * @return [string] expires_at
 	 */
-	public function login(Request $request) 
+	public function login(Request $request)
 	{
 		$request->validate([
 			'username' => 'required|string',
@@ -59,7 +31,7 @@ class AuthController extends BaseController
 
 		$credentials = request(['username', 'password']);
 
-		if(!Auth::attempt($credentials)) {
+		if (!Auth::attempt($credentials)) {
 			return $this->sendError(['error' => 'Unauthorized.'], 401);
 		}
 
@@ -69,7 +41,7 @@ class AuthController extends BaseController
 
 		if ($request->remember_me)
 			$token->expires_at = Carbon::now()->addWeeks(1);
-			
+
 		$token->save();
 
 		$result = [
@@ -77,14 +49,14 @@ class AuthController extends BaseController
 			'token_type' => 'Bearer',
 			'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
 			'id' => $user->id,
-			'name' => $user->first_name.' '.$user->last_name,
+			'name' => $user->first_name . ' ' . $user->last_name,
 			'username' => $user->username,
 			'success' => true
 		];
 
 		return $this->sendResponse($result);
 	}
-  
+
 	/**
 	 * Logout user (Revoke the token)
 	 *
@@ -97,15 +69,4 @@ class AuthController extends BaseController
 			'message' => 'Successfully logged out.'
 		]);
 	}
-  
-	/**
-	 * Get the authenticated User
-	 *
-	 * @return [json] user object
-	 */
-	/* public function user(Request $request)
-	{
-		// DEVNOTE: handle error if invalid token 
-		return response()->json($request->user());
-	} */
 }
